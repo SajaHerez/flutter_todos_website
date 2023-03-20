@@ -26,6 +26,13 @@ class TextStyles {
     fontSize: FontSize.FS24,
     //  height: LineHeight.LH32
   );
+  static TextStyle titleStyleLogo = TextStyle(
+    fontFamily: FontFamily.nunito,
+    fontWeight: FontWeights.regular,
+    color: AppColors.white,
+    fontSize: FontSize.FS35,
+    //  height: LineHeight.LH32
+  );
   static TextStyle titleStyle3 = TextStyle(
     fontFamily: FontFamily.nunito,
     fontWeight: FontWeights.semiBold,

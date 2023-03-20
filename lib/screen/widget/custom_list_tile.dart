@@ -1,5 +1,7 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
+import '../../util/style/appColors.dart';
+import '../../util/style/textStyle.dart';
 
 // class CustomListTile extends StatelessWidget {
 //   CustomListTile(
@@ -54,3 +56,46 @@
 //     );
 //   }
 // }
+
+class CustomListTile extends StatelessWidget {
+  CustomListTile(
+      {super.key,
+      required this.title,
+      required this.rightOnTap,
+      required this.leftOnTap});
+  final String title;
+  void Function()? rightOnTap;
+  void Function()? leftOnTap;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        //margin: const EdgeInsets.only(bottom: 15),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                AppColors.simeblue2,
+                AppColors.simegreen2,
+              ],
+            )),
+        child: ListTile(
+            title: Column(
+          children: [
+            Text(title, style: TextStyles.titleStyle3),
+            Row(
+              children: [
+                Icon(
+                  Icons.edit,
+                ),
+                Icon(
+                  Icons.delete,
+                )
+              ],
+            )
+          ],
+        )));
+  }
+}

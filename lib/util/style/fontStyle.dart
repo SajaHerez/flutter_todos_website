@@ -22,6 +22,7 @@ class FontSize {
   FontSize._();
   static double FS43 = 43;
   static double FS40 = 40;
+  static double FS35 = 35;
   static double FS25 = 25;
   static double FS24 = 24;
   static double FS23 = 23;
