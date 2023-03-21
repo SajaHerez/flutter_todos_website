@@ -38,6 +38,11 @@ dependencies:
   flutter_screenutil: ^5.7.0
   shared_preferences: ^2.0.15
   simple_gradient_text: ^1.2.4
+  flutter_reorderable_grid_view: ^4.0.0
+  reorderables: ^0.6.0
+  reorderable_grid_view: ^2.2.6
+ 
+
 
 dev_dependencies:
   flutter_test:
