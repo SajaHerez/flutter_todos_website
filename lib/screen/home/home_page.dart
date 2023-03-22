@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todos_website/data/model/task.dart';
+import 'package:flutter_todos_website/util/style/spaces.dart';
 import 'package:flutter_todos_website/util/style/textStyle.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../../data/model/mock/tasks.dart';
@@ -17,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController editController = TextEditingController();
+  final TextEditingController addController = TextEditingController();
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
       final element = tasks.removeAt(oldIndex);
@@ -52,55 +55,97 @@ class _HomeScreenState extends State<HomeScreen> {
                   AppColors.lightGreen,
                 ])),
           )),
-      body: Container(
-        width: 800,
-        height: 800,
-        margin: const EdgeInsets.only(left: 40, right: 40, top: 60),
-        child: Column(
-          children: [
-
-
-            
-            Expanded(
-              child: ReorderableGridView.extent(
-                clipBehavior: Clip.antiAlias,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
-                maxCrossAxisExtent: 200,
-                onReorder: _onReorder,
-                childAspectRatio: 1,
-                children: tasks.map((item) {
-                  return CustomListTile(
-                    key: ValueKey(item),
-                    title: item.title,
-                    rightOnTap: () {
-                      showAlertDialog(context, onPressed: () {
-                        setState(() {
-                          tasks.remove(item);
-                        });
-                      });
-                      Navigator.pop(context);
-                    },
-                    leftOnTap: () {
+      body: Center(
+        child: Container(
+          width: 800,
+          height: 800,
+          margin: const EdgeInsets.only(left: 40, right: 40, top: 60),
+          child: Column(
+            children: [
+              SpacesHelper.verticalSpace(80),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
                       showEditDialog(
                         context,
-                        controller: editController,
-                        title: "Edit",
-                        actionName: "Edit",
+                        controller: addController,
+                        title: "Add Note",
+                        actionName: "Add",
                         onPressed: () {
+                          final task = Task(
+                              title: addController.text,
+                              id: ++tasks.length,
+                              subTaskList: [],
+                              createdAt: DateTime.now().toString());
                           setState(() {
-                            item.title = editController.text;
-                            editController.clear();
+                            tasks.add(task);
+
+                            addController.clear();
                           });
                           Navigator.pop(context);
                         },
                       );
                     },
-                  );
-                }).toList(),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: AppColors.lightGreen),
+                      child: const Text(
+                        "+",
+                        style: TextStyle(fontSize: 35, color: AppColors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          ],
+              SpacesHelper.verticalSpace(15),
+              Expanded(
+                child: ReorderableGridView.extent(
+                  clipBehavior: Clip.antiAlias,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  maxCrossAxisExtent: 200,
+                  onReorder: _onReorder,
+                  childAspectRatio: 1,
+                  children: tasks.map((item) {
+                    return CustomListTile(
+                      key: ValueKey(item),
+                      title: item.title,
+                      rightOnTap: () {
+                        showAlertDialog(context, onPressed: () {
+                          setState(() {
+                            tasks.remove(item);
+                          });
+                        });
+                        Navigator.pop(context);
+                      },
+                      leftOnTap: () {
+                        showEditDialog(
+                          context,
+                          controller: editController,
+                          title: "Edit Note",
+                          actionName: "Edit",
+                          onPressed: () {
+                            setState(() {
+                              item.title = editController.text;
+                              editController.clear();
+                            });
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
