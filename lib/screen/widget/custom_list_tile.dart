@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/style/appColors.dart';
+import '../../util/style/spaces.dart';
 import '../../util/style/textStyle.dart';
 
 // class CustomListTile extends StatelessWidget {
@@ -69,10 +70,15 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        //margin: const EdgeInsets.only(bottom: 15),
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(255, 79, 76, 76).withOpacity(0.4),
+                spreadRadius: 4,
+                blurRadius: 8,
+              )
+            ],
             gradient: const LinearGradient(
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
@@ -81,21 +87,28 @@ class CustomListTile extends StatelessWidget {
                 AppColors.simegreen2,
               ],
             )),
-        child: ListTile(
-            title: Column(
+        child: Column(
           children: [
             Text(title, style: TextStyles.titleStyle3),
-            Row(
+            SpacesHelper.verticalSpace(100),
+            ButtonBar(
               children: [
-                Icon(
-                  Icons.edit,
+                GestureDetector(
+                  onTap: leftOnTap,
+                  child: const Icon(
+                    Icons.edit,
+                  ),
                 ),
-                Icon(
-                  Icons.delete,
+                SpacesHelper.verticalSpace(15),
+                GestureDetector(
+                  onTap: rightOnTap,
+                  child: const Icon(
+                    Icons.delete,
+                  ),
                 )
               ],
             )
           ],
-        )));
+        ));
   }
 }

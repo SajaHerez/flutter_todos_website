@@ -16,7 +16,7 @@ class Routers {
         return MaterialPageRoute(builder: (context) =>   LoginScreen());
              case RouterName.homeScreen:
         return MaterialPageRoute(
-            builder: (context) => const HomeScreen());
+            builder: (context) =>  HomeScreen());
       default:
         return RoutingUtil.errorRoute();
     }

@@ -3,29 +3,43 @@ import 'package:flutter/material.dart';
 import '../../util/style/appColors.dart';
 import '../../util/style/textStyle.dart';
 
-Future<void> showAlertDialog(BuildContext context,
-    {required void Function()? onPressed}) async {
+Future<void> showEditDialog(BuildContext context,
+    {required void Function()? onPressed,
+    required TextEditingController controller,
+    required String title,
+    required String actionName}) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
         buttonPadding: const EdgeInsets.only(right: 80),
-        // actionsPadding: const EdgeInsets.only(left: 50, right: 60),
         titlePadding: const EdgeInsets.only(top: 25),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: AppColors.simeBlack,
-        title: const Icon(
-          Icons.info,
-          color: AppColors.midGray2,
-          size: 28,
-        ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-        content: Text(
-          "Are your sure you want Delete this Note ?",
+        title: Text(
+          title,
           textAlign: TextAlign.center,
           style: TextStyles.dialogTitleStyle,
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        content: SizedBox(
+          width: 400,
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+              hintText: 'Type something...',
+              hintStyle: TextStyles.descriptionTextStyle,
+              filled: true,
+              fillColor: AppColors.darkGray,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+          ),
         ),
         actionsAlignment: MainAxisAlignment.spaceEvenly,
         actions: <Widget>[
@@ -49,7 +63,7 @@ Future<void> showAlertDialog(BuildContext context,
             ),
             onPressed: onPressed,
             child: Text(
-              'Delete',
+              actionName,
               style: TextStyles.btnTextStyle2,
             ),
           ),
