@@ -9,6 +9,7 @@ import '../../util/style/appColors.dart';
 import '../widget/custom_list_tile.dart';
 import '../widget/dialog.dart';
 import '../widget/edit_dialog.dart';
+import '../widget/sort_pop_up_menu.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -102,7 +103,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  )
+                  ),
+                  SpacesHelper.horizontalSpace(5),
+                  SortMenue(
+                    sortOnCompletedDate: () {
+                      setState(() {
+                        tasks.sort((a, b) =>
+                            a.completedAt?.compareTo(b.completedAt ?? "") ?? 0);
+                      });
+                    },
+                    sortOnCreatedDate: () {
+                      setState(() {
+                        tasks.sort(
+                            (a, b) => -a.createdAt.compareTo(b.createdAt));
+                      });
+                    },
+                  ),
                 ],
               ),
               SpacesHelper.verticalSpace(15),
@@ -120,6 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onChanged: (value) {
                         setState(() {
                           item.isDone = value!;
+                          item.completedAt =
+                              DateTime.now().toString().substring(0, 16);
                           print("the is Done value ${item.isDone}");
                         });
                       },
@@ -155,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           item.isCancelled = !item.isCancelled!;
                           item.isDone = item.isDone == true ? false : null;
+                          item.completedAt = null;
                           print(
                               "  the cancelled  value is : ${item.isCancelled}");
                           // 3 cases  active => normal style , cancel => red style , done=> green style

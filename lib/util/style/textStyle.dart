@@ -115,6 +115,13 @@ class TextStyles {
     fontSize: FontSize.FS10,
     //  height: LineHeight.LH25,
   );
+  static TextStyle smallTextStyle = TextStyle(
+    fontFamily: FontFamily.nunito,
+    fontWeight: FontWeights.regular,
+    color: AppColors.white,
+    fontSize: FontSize.FS10,
+    //  height: LineHeight.LH25,
+  );
   static TextStyle descriptionTextStyle = TextStyle(
     fontFamily: FontFamily.nunito,
     fontWeight: FontWeights.regular,

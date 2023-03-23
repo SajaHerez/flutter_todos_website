@@ -94,7 +94,7 @@ class CustomListTile extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.bottomLeft,
-              child: Text(createdAt, style: TextStyles.descriptionTextStyle),
+              child: Text(createdAt, style: TextStyles.smallTextStyle),
             ),
           ],
         ));
