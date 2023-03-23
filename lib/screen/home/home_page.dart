@@ -111,13 +111,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   clipBehavior: Clip.antiAlias,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  maxCrossAxisExtent: 200,
+                  maxCrossAxisExtent: 250,
                   onReorder: _onReorder,
-                  childAspectRatio: 1,
+                  childAspectRatio: .90,
                   children: tasks.map((item) {
                     return CustomListTile(
+                      createdAt: item.createdAt,
+                      onChanged: (value) {
+                        setState(() {
+                          item.isDone = value!;
+                          print("the is Done value ${item.isDone}");
+                        });
+                      },
                       isDone: item.isDone ?? false,
-                      isCancelled: false,
+                      isCancelled: item.isCancelled ?? false,
                       key: ValueKey(item),
                       title: item.title,
                       deleteOnTap: () {
@@ -146,9 +153,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       cancelOnTap: () {
                         setState(() {
+                          item.isCancelled = !item.isCancelled!;
+                          item.isDone = item.isDone == true ? false : null;
+                          print(
+                              "  the cancelled  value is : ${item.isCancelled}");
                           // 3 cases  active => normal style , cancel => red style , done=> green style
-                          // item.title
-                          // editController.clear();
                         });
                       },
                     );

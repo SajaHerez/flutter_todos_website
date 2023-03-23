@@ -7,16 +7,20 @@ import '../../util/style/textStyle.dart';
 class CustomListTile extends StatelessWidget {
   CustomListTile(
       {super.key,
+      required this.createdAt,
       required this.title,
       required this.deleteOnTap,
       required this.editOnTap,
       required this.cancelOnTap,
+      required this.onChanged,
       this.isDone = false,
       this.isCancelled = false});
   final String title;
+  final String createdAt;
   void Function() deleteOnTap;
   void Function() editOnTap;
   void Function() cancelOnTap;
+  void Function(bool?)? onChanged;
   bool isDone;
   bool isCancelled;
   @override
@@ -47,11 +51,9 @@ class CustomListTile extends StatelessWidget {
               alignment: MainAxisAlignment.spaceBetween,
               children: [
                 Checkbox(
+                    activeColor: AppColors.green,
                     value: isDone,
-                    onChanged: (value) {
-                      isDone = value ?? false;
-                      print("the is Done value $isDone");
-                    }),
+                    onChanged: isCancelled == true ? null : onChanged),
                 PopupMenuButton(
                   itemBuilder: (context) {
                     return [
@@ -63,9 +65,18 @@ class CustomListTile extends StatelessWidget {
                         value: 'delete',
                         child: Text('Delete'),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'cancel',
-                        child: Text('Cancel'),
+                        child: Row(
+                          children: [
+                            const Text("Cancel"),
+                            if (isCancelled)
+                              const Icon(
+                                Icons.check,
+                                color: AppColors.red,
+                              )
+                          ],
+                        ),
                       )
                     ];
                   },
@@ -79,15 +90,12 @@ class CustomListTile extends StatelessWidget {
                     }
                   },
                 ),
-
-                // GestureDetector(
-                //   onTap: rightOnTap,
-                //   child: const Icon(
-                //     Icons.delete,
-                //   ),
-                // )
               ],
-            )
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(createdAt, style: TextStyles.descriptionTextStyle),
+            ),
           ],
         ));
   }

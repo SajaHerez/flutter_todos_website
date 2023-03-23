@@ -40,10 +40,11 @@ class TextStyles {
     fontSize: FontSize.FS25,
     //  height: LineHeight.LH32
   );
-   static TextStyle cancelledTitleStyle = TextStyle(
+  static TextStyle cancelledTitleStyle = TextStyle(
     fontFamily: FontFamily.nunito,
     fontWeight: FontWeights.semiBold,
-    color: AppColors.simeRed,
+    color: AppColors.red,
+    decoration: TextDecoration.lineThrough,
     fontSize: FontSize.FS25,
     //  height: LineHeight.LH32
   );
@@ -51,7 +52,8 @@ class TextStyles {
   static TextStyle doneTitleStyle = TextStyle(
     fontFamily: FontFamily.nunito,
     fontWeight: FontWeights.semiBold,
-    color: Color.fromARGB(255, 4, 125, 105),
+    color: AppColors.green,
+    decoration: TextDecoration.lineThrough,
     fontSize: FontSize.FS25,
     //  height: LineHeight.LH32
   );

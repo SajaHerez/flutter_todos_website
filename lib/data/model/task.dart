@@ -5,13 +5,15 @@ class Task {
   String createdAt;
   String? completedAt;
   bool? isDone;
+  bool? isCancelled;
   Task(
       {required this.title,
       required this.id,
       required this.subTaskList,
       required this.createdAt,
       this.completedAt,
-      this.isDone = false});
+      this.isDone = false,
+      this.isCancelled= false,});
   factory Task.fromJson(Map<String, dynamic> json) {
     List<SubTask> sublist =
         json["subTaskList"].map((subtask) => SubTask.fromJson(subtask));
@@ -21,20 +23,20 @@ class Task {
         createdAt: json["createdAt"],
         completedAt: json["completedAt"],
         isDone: json["isDone"],
+        isCancelled:json["isCancelled"],
         subTaskList: sublist);
   }
-   Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       "title": title,
       "id": id,
-      "subTaskList":subTaskList,
+      "subTaskList": subTaskList,
       "createdAt": createdAt,
       "completedAt": completedAt,
-      "isDone": isDone
+      "isDone": isDone,
+      "isCancelled":isCancelled
     };
   }
-  
-
 }
 
 class SubTask {
