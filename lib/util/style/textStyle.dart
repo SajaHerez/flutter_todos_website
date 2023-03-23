@@ -40,6 +40,21 @@ class TextStyles {
     fontSize: FontSize.FS25,
     //  height: LineHeight.LH32
   );
+   static TextStyle cancelledTitleStyle = TextStyle(
+    fontFamily: FontFamily.nunito,
+    fontWeight: FontWeights.semiBold,
+    color: AppColors.simeRed,
+    fontSize: FontSize.FS25,
+    //  height: LineHeight.LH32
+  );
+
+  static TextStyle doneTitleStyle = TextStyle(
+    fontFamily: FontFamily.nunito,
+    fontWeight: FontWeights.semiBold,
+    color: Color.fromARGB(255, 4, 125, 105),
+    fontSize: FontSize.FS25,
+    //  height: LineHeight.LH32
+  );
   static TextStyle dialogTitleStyle = TextStyle(
     fontFamily: FontFamily.nunito,
     fontWeight: FontWeights.semiBold,

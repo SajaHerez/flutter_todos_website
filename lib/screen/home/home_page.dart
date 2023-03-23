@@ -116,9 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   childAspectRatio: 1,
                   children: tasks.map((item) {
                     return CustomListTile(
+                      isDone: item.isDone ?? false,
+                      isCancelled: false,
                       key: ValueKey(item),
                       title: item.title,
-                      rightOnTap: () {
+                      deleteOnTap: () {
                         showAlertDialog(context, onPressed: () {
                           setState(() {
                             tasks.remove(item);
@@ -126,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                       },
-                      leftOnTap: () {
+                      editOnTap: () {
                         editController.text = item.title;
                         showEditDialog(
                           context,
@@ -141,6 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.pop(context);
                           },
                         );
+                      },
+                      cancelOnTap: () {
+                        setState(() {
+                          // 3 cases  active => normal style , cancel => red style , done=> green style
+                          // item.title
+                          // editController.clear();
+                        });
                       },
                     );
                   }).toList(),

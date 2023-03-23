@@ -4,69 +4,21 @@ import '../../util/style/appColors.dart';
 import '../../util/style/spaces.dart';
 import '../../util/style/textStyle.dart';
 
-// class CustomListTile extends StatelessWidget {
-//   CustomListTile(
-//       {super.key,
-//       required this.title,
-//       required this.rightOnTap,
-//       required this.leftOnTap});
-//   final String title;
-//   void Function()? rightOnTap;
-//   void Function()? leftOnTap;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Slidable(
-//       endActionPane: ActionPane(
-//         motion: const ScrollMotion(),
-//         extentRatio: .3,
-//         children: [
-//           ScaleButtom(
-//             color: AppColors.simeRed,
-//             onTap: rightOnTap,
-//             icon: Icons.delete,
-//           )
-//         ],
-//       ),
-//       startActionPane: ActionPane(
-//         extentRatio: .25,
-//         motion: const ScrollMotion(),
-//         children: [
-//           ScaleButtom(
-//             color: AppColors.simeGreen,
-//             onTap: leftOnTap,
-//             icon: Icons.edit,
-//             margin: const EdgeInsets.only(right: 10),
-//           )
-//         ],
-//       ),
-//       child: Container(
-//         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-//         margin: const EdgeInsets.only(bottom: 15),
-//         decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(10),
-//             gradient: const LinearGradient(
-//               begin: Alignment.centerRight,
-//               end: Alignment.centerLeft,
-//               colors: [
-//                 AppColors.simegreen2,
-//                 AppColors.simeblue2,
-//               ],
-//             )),
-//         child: ListTile(title: Text(title, style: TextStyles.titleStyle3)),
-//       ),
-//     );
-//   }
-// }
-
 class CustomListTile extends StatelessWidget {
   CustomListTile(
       {super.key,
       required this.title,
-      required this.rightOnTap,
-      required this.leftOnTap});
+      required this.deleteOnTap,
+      required this.editOnTap,
+      required this.cancelOnTap,
+      this.isDone = false,
+      this.isCancelled = false});
   final String title;
-  void Function()? rightOnTap;
-  void Function()? leftOnTap;
+  void Function() deleteOnTap;
+  void Function() editOnTap;
+  void Function() cancelOnTap;
+  bool isDone;
+  bool isCancelled;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -89,26 +41,64 @@ class CustomListTile extends StatelessWidget {
             )),
         child: Column(
           children: [
-            Text(title, style: TextStyles.titleStyle3),
-            SpacesHelper.verticalSpace(100),
+            Text(title, style: getStyle(isDone, isCancelled)),
+            SpacesHelper.verticalSpace(85),
             ButtonBar(
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: leftOnTap,
-                  child: const Icon(
-                    Icons.edit,
-                  ),
+                Checkbox(
+                    value: isDone,
+                    onChanged: (value) {
+                      isDone = value ?? false;
+                      print("the is Done value $isDone");
+                    }),
+                PopupMenuButton(
+                  itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Text('Edit'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text('Delete'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'cancel',
+                        child: Text('Cancel'),
+                      )
+                    ];
+                  },
+                  onSelected: (String value) {
+                    if (value == 'edit') {
+                      editOnTap();
+                    } else if (value == 'delete') {
+                      deleteOnTap();
+                    } else if (value == 'cancel') {
+                      cancelOnTap();
+                    }
+                  },
                 ),
-                SpacesHelper.verticalSpace(15),
-                GestureDetector(
-                  onTap: rightOnTap,
-                  child: const Icon(
-                    Icons.delete,
-                  ),
-                )
+
+                // GestureDetector(
+                //   onTap: rightOnTap,
+                //   child: const Icon(
+                //     Icons.delete,
+                //   ),
+                // )
               ],
             )
           ],
         ));
+  }
+}
+
+TextStyle getStyle(isDone, isCancelled) {
+  if (isCancelled) {
+    return TextStyles.cancelledTitleStyle;
+  } else if (isDone) {
+    return TextStyles.doneTitleStyle;
+  } else {
+    return TextStyles.titleStyle3;
   }
 }
