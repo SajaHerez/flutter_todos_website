@@ -70,7 +70,7 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+        padding: const EdgeInsets.only(left: 10, top: 10),
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(

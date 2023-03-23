@@ -76,12 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           final task = Task(
                               title: addController.text,
-                              id: ++tasks.length,
+                              id: tasks.length + 1,
                               subTaskList: [],
-                              createdAt: DateTime.now().toString());
+                              createdAt:
+                                  DateTime.now().toString().substring(0, 16));
+                          print(task.createdAt);
                           setState(() {
                             tasks.add(task);
-
                             addController.clear();
                           });
                           Navigator.pop(context);
@@ -121,11 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         showAlertDialog(context, onPressed: () {
                           setState(() {
                             tasks.remove(item);
+                            Navigator.pop(context);
                           });
                         });
-                        Navigator.pop(context);
                       },
                       leftOnTap: () {
+                        editController.text = item.title;
                         showEditDialog(
                           context,
                           controller: editController,

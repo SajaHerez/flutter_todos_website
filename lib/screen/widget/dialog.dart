@@ -11,7 +11,7 @@ Future<void> showAlertDialog(BuildContext context,
     builder: (BuildContext context) {
       return AlertDialog(
         buttonPadding: const EdgeInsets.only(right: 80),
-        // actionsPadding: const EdgeInsets.only(left: 50, right: 60),
+     //   actionsPadding: const EdgeInsets.only(left: 50, right: 60),
         titlePadding: const EdgeInsets.only(top: 25),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: AppColors.simeBlack,
