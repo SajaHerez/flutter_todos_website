@@ -6,14 +6,15 @@ class Task {
   String? completedAt;
   bool? isDone;
   bool? isCancelled;
-  Task(
-      {required this.title,
-      required this.id,
-      required this.subTaskList,
-      required this.createdAt,
-      this.completedAt,
-      this.isDone = false,
-      this.isCancelled= false,});
+  Task({
+    required this.title,
+    required this.id,
+    required this.subTaskList,
+    required this.createdAt,
+    this.completedAt,
+    this.isDone = false,
+    this.isCancelled = false,
+  });
   factory Task.fromJson(Map<String, dynamic> json) {
     List<SubTask> sublist =
         json["subTaskList"].map((subtask) => SubTask.fromJson(subtask));
@@ -23,7 +24,7 @@ class Task {
         createdAt: json["createdAt"],
         completedAt: json["completedAt"],
         isDone: json["isDone"],
-        isCancelled:json["isCancelled"],
+        isCancelled: json["isCancelled"],
         subTaskList: sublist);
   }
   Map<String, dynamic> toJson() {
@@ -34,7 +35,7 @@ class Task {
       "createdAt": createdAt,
       "completedAt": completedAt,
       "isDone": isDone,
-      "isCancelled":isCancelled
+      "isCancelled": isCancelled
     };
   }
 }
@@ -45,12 +46,15 @@ class SubTask {
   String createdAt;
   String? completedAt;
   bool? isDone;
-  SubTask(
-      {required this.title,
-      required this.id,
-      required this.createdAt,
-      this.completedAt,
-      this.isDone = false});
+  bool? isCancelled;
+  SubTask({
+    required this.title,
+    required this.id,
+    required this.createdAt,
+    this.completedAt,
+    this.isDone = false,
+    this.isCancelled = false,
+  });
 
   factory SubTask.fromJson(Map<String, dynamic> json) {
     return SubTask(
@@ -58,7 +62,8 @@ class SubTask {
         id: json["id"],
         createdAt: json["createdAt"],
         completedAt: json["completedAt"],
-        isDone: json["isDone"]);
+        isDone: json["isDone"],
+        isCancelled: json['isCancelled']);
   }
 
   Map<String, dynamic> toJson() {
@@ -67,7 +72,8 @@ class SubTask {
       "id": id,
       "createdAt": createdAt,
       "completedAt": completedAt,
-      "isDone": isDone
+      "isDone": isDone,
+      "isCancelled":isCancelled
     };
   }
 }

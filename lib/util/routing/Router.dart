@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import '../../data/model/task.dart';
+import '../../screen/activities/activities_page.dart';
 import '../../screen/home/home_page.dart';
 import '../../screen/sign in/sign_in_page.dart';
 import '../../screen/sign up/sign_up_page.dart';
@@ -17,6 +19,9 @@ class Routers {
              case RouterName.homeScreen:
         return MaterialPageRoute(
             builder: (context) =>  HomeScreen());
+                 case RouterName.activitiesScreen:
+        return MaterialPageRoute(
+            builder: (context) =>  ActivitiesScreen(subTaskList:settings.arguments as List<SubTask>,));
       default:
         return RoutingUtil.errorRoute();
     }

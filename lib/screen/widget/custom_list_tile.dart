@@ -13,6 +13,7 @@ class CustomListTile extends StatelessWidget {
       required this.editOnTap,
       required this.cancelOnTap,
       required this.onChanged,
+      required this.onTap,
       this.isDone = false,
       this.isCancelled = false});
   final String title;
@@ -21,83 +22,87 @@ class CustomListTile extends StatelessWidget {
   void Function() editOnTap;
   void Function() cancelOnTap;
   void Function(bool?)? onChanged;
+  void Function()? onTap;
   bool isDone;
   bool isCancelled;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.only(left: 10, top: 10),
-        decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(255, 79, 76, 76).withOpacity(0.4),
-                spreadRadius: 4,
-                blurRadius: 8,
-              )
-            ],
-            gradient: const LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              colors: [
-                AppColors.simeblue2,
-                AppColors.simegreen2,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+          padding: const EdgeInsets.only(left: 10, top: 10),
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: const Color.fromARGB(255, 79, 76, 76).withOpacity(0.4),
+                  spreadRadius: 4,
+                  blurRadius: 8,
+                )
               ],
-            )),
-        child: Column(
-          children: [
-            Text(title, style: getStyle(isDone, isCancelled)),
-            SpacesHelper.verticalSpace(85),
-            ButtonBar(
-              alignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Checkbox(
-                    activeColor: AppColors.green,
-                    value: isDone,
-                    onChanged: isCancelled == true ? null : onChanged),
-                PopupMenuButton(
-                  itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Edit'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Delete'),
-                      ),
-                      PopupMenuItem(
-                        value: 'cancel',
-                        child: Row(
-                          children: [
-                            const Text("Cancel"),
-                            if (isCancelled)
-                              const Icon(
-                                Icons.check,
-                                color: AppColors.red,
-                              )
-                          ],
+              gradient: const LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+                  AppColors.simeblue2,
+                  AppColors.simegreen2,
+                ],
+              )),
+          child: Column(
+            children: [
+              Text(title, style: getStyle(isDone, isCancelled)),
+              SpacesHelper.verticalSpace(85),
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Checkbox(
+                      activeColor: AppColors.green,
+                      value: isDone,
+                      onChanged: isCancelled == true ? null : onChanged),
+                  PopupMenuButton(
+                    itemBuilder: (context) {
+                      return [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Edit'),
                         ),
-                      )
-                    ];
-                  },
-                  onSelected: (String value) {
-                    if (value == 'edit') {
-                      editOnTap();
-                    } else if (value == 'delete') {
-                      deleteOnTap();
-                    } else if (value == 'cancel') {
-                      cancelOnTap();
-                    }
-                  },
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(createdAt, style: TextStyles.smallTextStyle),
-            ),
-          ],
-        ));
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Delete'),
+                        ),
+                        PopupMenuItem(
+                          value: 'cancel',
+                          child: Row(
+                            children: [
+                              const Text("Cancel"),
+                              if (isCancelled)
+                                const Icon(
+                                  Icons.check,
+                                  color: AppColors.red,
+                                )
+                            ],
+                          ),
+                        )
+                      ];
+                    },
+                    onSelected: (String value) {
+                      if (value == 'edit') {
+                        editOnTap();
+                      } else if (value == 'delete') {
+                        deleteOnTap();
+                      } else if (value == 'cancel') {
+                        cancelOnTap();
+                      }
+                    },
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(createdAt, style: TextStyles.smallTextStyle),
+              ),
+            ],
+          )),
+    );
   }
 }
 

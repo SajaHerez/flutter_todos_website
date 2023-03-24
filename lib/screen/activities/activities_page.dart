@@ -1,38 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todos_website/data/model/task.dart';
-import 'package:flutter_todos_website/util/style/spaces.dart';
-import 'package:flutter_todos_website/util/style/textStyle.dart';
+import 'package:flutter_todos_website/screen/widget/custom_app_bar.dart';
+import 'package:flutter_todos_website/util/style/appColors.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
-import '../../data/model/mock/tasks.dart';
-import '../../util/constant/pathes.dart';
-import '../../util/routing/RouterNamed.dart';
-import '../../util/routing/RoutingUilites.dart';
-import '../../util/style/appColors.dart';
-import '../widget/custom_app_bar.dart';
+import '../../data/model/task.dart';
+import '../../util/style/spaces.dart';
+import '../widget/custom_card.dart';
 import '../widget/custom_list_tile.dart';
 import '../widget/dialog.dart';
 import '../widget/edit_dialog.dart';
 import '../widget/sort_pop_up_menu.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
-
+class ActivitiesScreen extends StatefulWidget {
+  ActivitiesScreen({super.key, required this.subTaskList});
+  List<SubTask> subTaskList;
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ActivitiesScreen> createState() => _ActivitiesScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ActivitiesScreenState extends State<ActivitiesScreen> {
   final TextEditingController editController = TextEditingController();
   final TextEditingController addController = TextEditingController();
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
-      final element = tasks.removeAt(oldIndex);
-      tasks.insert(newIndex, element);
+      final element = widget.subTaskList.removeAt(oldIndex);
+      widget.subTaskList.insert(newIndex, element);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<SubTask> list = widget.subTaskList;
     return Scaffold(
       appBar: customAppBar(),
       body: Center(
@@ -51,18 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       showEditDialog(
                         context,
                         controller: addController,
-                        title: "Add Note",
+                        title: "Add Task",
                         actionName: "Add",
                         onPressed: () {
-                          final task = Task(
+                          final task = SubTask(
                               title: addController.text,
-                              id: tasks.length + 1,
-                              subTaskList: [],
+                              id: widget.subTaskList.length + 1,
                               createdAt:
                                   DateTime.now().toString().substring(0, 16));
                           print(task.createdAt);
                           setState(() {
-                            tasks.add(task);
+                            widget.subTaskList.add(task);
                             addController.clear();
                           });
                           Navigator.pop(context);
@@ -87,13 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   SortMenue(
                     sortOnCompletedDate: () {
                       setState(() {
-                        tasks.sort((a, b) =>
+                        widget.subTaskList.sort((a, b) =>
                             a.completedAt?.compareTo(b.completedAt ?? "") ?? 0);
                       });
                     },
                     sortOnCreatedDate: () {
                       setState(() {
-                        tasks.sort(
+                        widget.subTaskList.sort(
                             (a, b) => -a.createdAt.compareTo(b.createdAt));
                       });
                     },
@@ -109,12 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   maxCrossAxisExtent: 250,
                   onReorder: _onReorder,
                   childAspectRatio: .90,
-                  children: tasks.map((item) {
-                    return CustomListTile(
-                      onTap: () {
-                        RoutingUtil.push(RouterName.activitiesScreen,
-                            arguments: item.subTaskList);
-                      },
+                  children: list.map((item) {
+                    return CustomCard(
                       createdAt: item.createdAt,
                       onChanged: (value) {
                         setState(() {
@@ -131,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       deleteOnTap: () {
                         showAlertDialog(context, onPressed: () {
                           setState(() {
-                            tasks.remove(item);
+                            widget.subTaskList.remove(item);
                             Navigator.pop(context);
                           });
                         });
@@ -141,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         showEditDialog(
                           context,
                           controller: editController,
-                          title: "Edit Note",
+                          title: "Edit Task",
                           actionName: "Edit",
                           onPressed: () {
                             setState(() {

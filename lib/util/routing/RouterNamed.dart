@@ -3,6 +3,6 @@ class RouterName {
   static const loginScreen = "/login";
   static const signUpScreen = "/signUp";
   static const homeScreen = '/home';
-  static const sreachScreen= '/activesScreen';
+  static const activitiesScreen= '/activities';
 
 }
