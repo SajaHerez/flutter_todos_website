@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todos_website/data/model/task.dart';
 import 'package:flutter_todos_website/util/style/spaces.dart';
-import 'package:flutter_todos_website/util/style/textStyle.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../../data/model/mock/tasks.dart';
-import '../../util/constant/pathes.dart';
 import '../../util/routing/RouterNamed.dart';
 import '../../util/routing/RoutingUilites.dart';
 import '../../util/style/appColors.dart';
@@ -58,8 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: addController.text,
                               id: tasks.length + 1,
                               subTaskList: [],
-                              createdAt:
-                                  DateTime.now().toString().substring(0, 16));
+                              createdAt: DateTime.now().toString());
                           print(task.createdAt);
                           setState(() {
                             tasks.add(task);
@@ -88,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     sortOnCompletedDate: () {
                       setState(() {
                         tasks.sort((a, b) =>
-                            a.completedAt?.compareTo(b.completedAt ?? "") ?? 0);
+                            a.completedAt?.compareTo(b.completedAt ?? "") ?? 1);
                       });
                     },
                     sortOnCreatedDate: () {
@@ -115,12 +112,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         RoutingUtil.push(RouterName.activitiesScreen,
                             arguments: item.subTaskList);
                       },
-                      createdAt: item.createdAt,
+                      createdAt: item.createdAt.substring(0, 16),
                       onChanged: (value) {
                         setState(() {
                           item.isDone = value!;
-                          item.completedAt =
-                              DateTime.now().toString().substring(0, 16);
+                          item.completedAt = DateTime.now().toString();
                           print("the is Done value ${item.isDone}");
                         });
                       },

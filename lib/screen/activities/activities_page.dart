@@ -3,6 +3,7 @@ import 'package:flutter_todos_website/screen/widget/custom_app_bar.dart';
 import 'package:flutter_todos_website/util/style/appColors.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../../data/model/task.dart';
+import '../../util/routing/RoutingUilites.dart';
 import '../../util/style/spaces.dart';
 import '../widget/custom_card.dart';
 import '../widget/custom_list_tile.dart';
@@ -41,59 +42,75 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             children: [
               SpacesHelper.verticalSpace(80),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      showEditDialog(
-                        context,
-                        controller: addController,
-                        title: "Add Task",
-                        actionName: "Add",
-                        onPressed: () {
-                          final task = SubTask(
-                              title: addController.text,
-                              id: widget.subTaskList.length + 1,
-                              createdAt:
-                                  DateTime.now().toString().substring(0, 16));
-                          print(task.createdAt);
-                          setState(() {
-                            widget.subTaskList.add(task);
-                            addController.clear();
-                          });
-                          Navigator.pop(context);
+                  IconButton(
+                      onPressed: () {
+                        RoutingUtil.pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 28,
+                        color: AppColors.white,
+                      )),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          showEditDialog(
+                            context,
+                            controller: addController,
+                            title: "Add Task",
+                            actionName: "Add",
+                            onPressed: () {
+                              final task = SubTask(
+                                  title: addController.text,
+                                  id: widget.subTaskList.length + 1,
+                                  createdAt: DateTime.now()
+                                      .toString()
+                                      .substring(0, 16));
+                              print(task.createdAt);
+                              setState(() {
+                                widget.subTaskList.add(task);
+                                addController.clear();
+                              });
+                              Navigator.pop(context);
+                            },
+                          );
                         },
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: AppColors.lightGreen),
-                      child: const Text(
-                        "+",
-                        style: TextStyle(fontSize: 35, color: AppColors.white),
-                        textAlign: TextAlign.center,
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: AppColors.lightGreen),
+                          child: const Text(
+                            "+",
+                            style:
+                                TextStyle(fontSize: 35, color: AppColors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  SpacesHelper.horizontalSpace(5),
-                  SortMenue(
-                    sortOnCompletedDate: () {
-                      setState(() {
-                        widget.subTaskList.sort((a, b) =>
-                            a.completedAt?.compareTo(b.completedAt ?? "") ?? 0);
-                      });
-                    },
-                    sortOnCreatedDate: () {
-                      setState(() {
-                        widget.subTaskList.sort(
-                            (a, b) => -a.createdAt.compareTo(b.createdAt));
-                      });
-                    },
-                  ),
+                      SpacesHelper.horizontalSpace(5),
+                      SortMenue(
+                        sortOnCompletedDate: () {
+                          setState(() {
+                            widget.subTaskList.sort((a, b) =>
+                                a.completedAt?.compareTo(b.completedAt ?? "") ??
+                                1);
+                          });
+                        },
+                        sortOnCreatedDate: () {
+                          setState(() {
+                            widget.subTaskList.sort(
+                                (a, b) => -a.createdAt.compareTo(b.createdAt));
+                          });
+                        },
+                      ),
+                    ],
+                  )
                 ],
               ),
               SpacesHelper.verticalSpace(15),
