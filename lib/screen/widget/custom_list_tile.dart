@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 import '../../util/style/appColors.dart';
 import '../../util/style/spaces.dart';
 import '../../util/style/textStyle.dart';
@@ -14,6 +14,7 @@ class CustomListTile extends StatelessWidget {
       required this.cancelOnTap,
       required this.onChanged,
       required this.onTap,
+      required this.getPercent,
       this.isDone = false,
       this.isCancelled = false});
   final String title;
@@ -23,6 +24,7 @@ class CustomListTile extends StatelessWidget {
   void Function() cancelOnTap;
   void Function(bool?)? onChanged;
   void Function()? onTap;
+  double Function() getPercent;
   bool isDone;
   bool isCancelled;
   @override
@@ -50,7 +52,25 @@ class CustomListTile extends StatelessWidget {
           child: Column(
             children: [
               Text(title, style: getStyle(isDone, isCancelled)),
-              SpacesHelper.verticalSpace(85),
+              SpacesHelper.verticalSpace(55),
+              Align(
+                alignment: Alignment.center,
+                child: LinearPercentIndicator(
+                    width: 160.0,
+                    barRadius: const Radius.circular(10),
+                    lineHeight: 14.0,
+                    percent: getPercent(),
+                    animationDuration: 800,
+                    animation: true,
+                    center: Text(
+                      "${getPercent() * 100}%",
+                      style: const TextStyle(
+                          fontSize: 12.0, color: AppColors.white),
+                    ),
+                    backgroundColor: Colors.white60,
+                    progressColor: Colors.black38),
+              ),
+              SpacesHelper.verticalSpace(20),
               ButtonBar(
                 alignment: MainAxisAlignment.spaceBetween,
                 children: [

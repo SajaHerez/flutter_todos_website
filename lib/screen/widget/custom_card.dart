@@ -28,7 +28,7 @@ class CustomCard extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.only(left: 10, top: 10),
         decoration: BoxDecoration(
-          color:const Color.fromARGB(255, 85, 83, 83),
+          color: const Color.fromARGB(255, 85, 83, 83),
           boxShadow: [
             BoxShadow(
               color: const Color.fromARGB(255, 79, 76, 76).withOpacity(0.2),
@@ -47,7 +47,12 @@ class CustomCard extends StatelessWidget {
                 Checkbox(
                     activeColor: AppColors.green,
                     value: isDone,
-                    onChanged: isCancelled == true ? null : onChanged),
+                    onChanged: (value) {
+                      isCancelled == true ? null : onChanged;
+                      if(isDone){
+                        
+                      }
+                    }),
                 PopupMenuButton(
                   itemBuilder: (context) {
                     return [

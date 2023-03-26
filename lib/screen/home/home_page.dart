@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todos_website/data/model/task.dart';
+import 'package:flutter_todos_website/data/service/task_controller.dart';
 import 'package:flutter_todos_website/util/style/spaces.dart';
+import 'package:provider/provider.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../../data/model/mock/tasks.dart';
 import '../../util/routing/RouterNamed.dart';
@@ -27,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
       final element = tasks.removeAt(oldIndex);
       tasks.insert(newIndex, element);
     });
+  }
+
+  @override
+  void initState() {
+    context.read<TaskController>().setTasks(tasks);
+    super.initState();
   }
 
   @override
@@ -108,6 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   childAspectRatio: .90,
                   children: tasks.map((item) {
                     return CustomListTile(
+                      getPercent: () {
+                        int index = tasks.indexOf(item);
+                        return Provider.of<TaskController>(context)
+                            .getTaskprogress(index);
+                      },
                       onTap: () {
                         RoutingUtil.push(RouterName.activitiesScreen,
                             arguments: item.subTaskList);

@@ -39,6 +39,8 @@ dependencies:
   shared_preferences: ^2.0.15
   simple_gradient_text: ^1.2.4
   reorderable_grid: ^1.0.6
+  percent_indicator: ^4.2.3
+  provider: ^6.0.5
   
 
 dev_dependencies:
