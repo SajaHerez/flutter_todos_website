@@ -148,6 +148,8 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                         });
                         Provider.of<TaskController>(context, listen: false)
                             .setTaskprogress(widget.task.id);
+                        Provider.of<TaskController>(context, listen: false)
+                            .setTodayProgress();
                       },
                       isDone: item.isDone ?? false,
                       isCancelled: item.isCancelled ?? false,
@@ -188,6 +190,8 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                         });
                         Provider.of<TaskController>(context, listen: false)
                             .setTaskprogress(widget.task.id);
+                        Provider.of<TaskController>(context, listen: false)
+                            .setTodayProgress();
                       },
                     );
                   }).toList(),
