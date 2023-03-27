@@ -21,7 +21,7 @@ class Routers {
             builder: (context) =>  HomeScreen());
                  case RouterName.activitiesScreen:
         return MaterialPageRoute(
-            builder: (context) =>  ActivitiesScreen(subTaskList:settings.arguments as List<SubTask>,));
+            builder: (context) =>  ActivitiesScreen(task:settings.arguments as Task,));
       default:
         return RoutingUtil.errorRoute();
     }

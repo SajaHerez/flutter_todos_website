@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todos_website/data/service/task_controller.dart';
 import 'package:flutter_todos_website/screen/widget/custom_app_bar.dart';
 import 'package:flutter_todos_website/util/style/appColors.dart';
+import 'package:flutter_todos_website/util/style/textStyle.dart';
+import 'package:provider/provider.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../../data/model/task.dart';
 import '../../util/routing/RoutingUilites.dart';
@@ -12,8 +15,8 @@ import '../widget/edit_dialog.dart';
 import '../widget/sort_pop_up_menu.dart';
 
 class ActivitiesScreen extends StatefulWidget {
-  ActivitiesScreen({super.key, required this.subTaskList});
-  List<SubTask> subTaskList;
+  ActivitiesScreen({super.key, required this.task});
+  Task task;
   @override
   State<ActivitiesScreen> createState() => _ActivitiesScreenState();
 }
@@ -23,14 +26,14 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
   final TextEditingController addController = TextEditingController();
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
-      final element = widget.subTaskList.removeAt(oldIndex);
-      widget.subTaskList.insert(newIndex, element);
+      final element = widget.task.subTaskList.removeAt(oldIndex);
+      widget.task.subTaskList.insert(newIndex, element);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<SubTask> list = widget.subTaskList;
+    List<SubTask> list = widget.task.subTaskList;
     return Scaffold(
       appBar: customAppBar(),
       body: Center(
@@ -44,15 +47,24 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        RoutingUtil.pop();
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        size: 28,
-                        color: AppColors.white,
-                      )),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            RoutingUtil.pop();
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            size: 28,
+                            color: AppColors.white,
+                          )),
+                      SpacesHelper.horizontalSpace(15),
+                      Text(
+                        widget.task.title,
+                        style: TextStyles.titleStyleLogo,
+                      )
+                    ],
+                  ),
                   Row(
                     children: [
                       GestureDetector(
@@ -65,13 +77,13 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                             onPressed: () {
                               final task = SubTask(
                                   title: addController.text,
-                                  id: widget.subTaskList.length + 1,
+                                  id: widget.task.subTaskList.length + 1,
                                   createdAt: DateTime.now()
                                       .toString()
                                       .substring(0, 16));
                               print(task.createdAt);
                               setState(() {
-                                widget.subTaskList.add(task);
+                                widget.task.subTaskList.add(task);
                                 addController.clear();
                               });
                               Navigator.pop(context);
@@ -97,14 +109,14 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                       SortMenue(
                         sortOnCompletedDate: () {
                           setState(() {
-                            widget.subTaskList.sort((a, b) =>
+                            widget.task.subTaskList.sort((a, b) =>
                                 a.completedAt?.compareTo(b.completedAt ?? "") ??
                                 1);
                           });
                         },
                         sortOnCreatedDate: () {
                           setState(() {
-                            widget.subTaskList.sort(
+                            widget.task.subTaskList.sort(
                                 (a, b) => -a.createdAt.compareTo(b.createdAt));
                           });
                         },
@@ -128,10 +140,14 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                       onChanged: (value) {
                         setState(() {
                           item.isDone = value!;
-                          item.completedAt =
-                              DateTime.now().toString().substring(0, 16);
-                          print("the is Done value ${item.isDone}");
+                          if (item.isDone!) {
+                            item.completedAt =
+                                DateTime.now().toString().substring(0, 16);
+                            print("the is Done value ${item.isDone}");
+                          }
                         });
+                        Provider.of<TaskController>(context, listen: false)
+                            .setTaskprogress(widget.task.id);
                       },
                       isDone: item.isDone ?? false,
                       isCancelled: item.isCancelled ?? false,
@@ -140,7 +156,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                       deleteOnTap: () {
                         showAlertDialog(context, onPressed: () {
                           setState(() {
-                            widget.subTaskList.remove(item);
+                            widget.task.subTaskList.remove(item);
                             Navigator.pop(context);
                           });
                         });
@@ -170,6 +186,8 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                               "  the cancelled  value is : ${item.isCancelled}");
                           // 3 cases  active => normal style , cancel => red style , done=> green style
                         });
+                        Provider.of<TaskController>(context, listen: false)
+                            .setTaskprogress(widget.task.id);
                       },
                     );
                   }).toList(),

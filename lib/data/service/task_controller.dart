@@ -4,6 +4,7 @@ import '../model/task.dart';
 
 class TaskController extends ChangeNotifier {
   List<Task> tasks = [];
+  Map<int, double> tasksProgressList = {};
 
   void setTasks(List<Task> tasks) {
     this.tasks = tasks;
@@ -20,16 +21,21 @@ class TaskController extends ChangeNotifier {
     return task;
   }
 
-  double getTaskprogress(int index) {
-    double progress = 0;
-    List<SubTask> subTaskList = tasks[index].subTaskList;
+  setTaskprogress(int id) {
+    print("in side setTaskprogress ");
+    Task task = tasks.firstWhere((element) => element.id == id);
+    print(task);
+    List<SubTask> subTaskList = task.subTaskList;
     if (subTaskList.isNotEmpty) {
       List isDoneTasks =
           subTaskList.where((task) => task.isDone as bool).toList();
-      progress = isDoneTasks.length / subTaskList.length;
-      // notifyListeners();
+      tasksProgressList[id] = isDoneTasks.length / subTaskList.length;
+      print(' tasksProgress  ${tasksProgressList[id]}');
+      notifyListeners();
     }
+  }
 
-    return progress;
+  double? getTaskprogress(int id) {
+    return tasksProgressList[id];
   }
 }

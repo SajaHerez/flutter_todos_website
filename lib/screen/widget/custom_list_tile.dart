@@ -24,7 +24,7 @@ class CustomListTile extends StatelessWidget {
   void Function() cancelOnTap;
   void Function(bool?)? onChanged;
   void Function()? onTap;
-  double Function() getPercent;
+  double? Function() getPercent;
   bool isDone;
   bool isCancelled;
   @override
@@ -59,11 +59,11 @@ class CustomListTile extends StatelessWidget {
                     width: 160.0,
                     barRadius: const Radius.circular(10),
                     lineHeight: 14.0,
-                    percent: getPercent(),
+                    percent: getPercent() ?? 0.0,
                     animationDuration: 800,
                     animation: true,
                     center: Text(
-                      "${getPercent() * 100}%",
+                      "${(getPercent() ?? 0.0) * 100}%",
                       style: const TextStyle(
                           fontSize: 12.0, color: AppColors.white),
                     ),

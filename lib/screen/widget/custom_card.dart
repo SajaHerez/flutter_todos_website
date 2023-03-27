@@ -47,12 +47,7 @@ class CustomCard extends StatelessWidget {
                 Checkbox(
                     activeColor: AppColors.green,
                     value: isDone,
-                    onChanged: (value) {
-                      isCancelled == true ? null : onChanged;
-                      if(isDone){
-                        
-                      }
-                    }),
+                    onChanged: isCancelled == true ? null : onChanged),
                 PopupMenuButton(
                   itemBuilder: (context) {
                     return [

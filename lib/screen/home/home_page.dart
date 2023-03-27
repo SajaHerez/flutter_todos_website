@@ -117,20 +117,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: tasks.map((item) {
                     return CustomListTile(
                       getPercent: () {
-                        int index = tasks.indexOf(item);
-                        return Provider.of<TaskController>(context)
-                            .getTaskprogress(index);
+                        return Provider.of<TaskController>(context).getTaskprogress(item.id);
                       },
                       onTap: () {
                         RoutingUtil.push(RouterName.activitiesScreen,
-                            arguments: item.subTaskList);
+                            arguments: item);
                       },
                       createdAt: item.createdAt.substring(0, 16),
                       onChanged: (value) {
                         setState(() {
                           item.isDone = value!;
-                          item.completedAt = DateTime.now().toString();
-                          print("the is Done value ${item.isDone}");
+                          if (item.isDone!) {
+                            item.completedAt = DateTime.now().toString();
+                            print("the is Done value ${item.isDone}");
+                          }
                         });
                       },
                       isDone: item.isDone ?? false,
