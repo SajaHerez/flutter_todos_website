@@ -14,13 +14,6 @@ class TaskController extends ChangeNotifier {
   List<Task> getTasks() {
     return tasks;
   }
-
-  Task getTask(int index) {
-    Task task = tasks[index];
-    notifyListeners();
-    return task;
-  }
-
   setTaskprogress(int id) {
     print("in side setTaskprogress ");
     Task task = tasks.firstWhere((element) => element.id == id);
