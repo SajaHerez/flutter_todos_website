@@ -8,8 +8,8 @@ class SubNoteAPI {
 
   Future<Response> addSubNote({
     required String path,
-     required int user_id,
-     required int note_id,
+    required String user_id,
+    required String note_id,
     required String title,
     required String completedAt,
     required String createdAt,
@@ -32,9 +32,9 @@ Future<Response> updateSubNote({
     required String completedAt,
     required  bool isCancelled,
     required  bool isDone,
-    required int user_id,
-    required int note_id ,
-    required int subNote_id 
+    required String user_id,
+    required String note_id ,
+    required String subNote_id 
   }) async {
     final response = await client.dio.put('$path/$user_id/$note_id/$subNote_id',data: {
       'title': title,
@@ -48,9 +48,9 @@ Future<Response> updateSubNote({
 
   Future<Response> deleteSubNote({
     required String path,
-    required int user_id,
-    required int note_id ,
-    required int subNote_id 
+    required String user_id,
+    required String note_id ,
+    required String subNote_id 
   }) async {
     final response = await client.dio.delete('$path/$user_id/$note_id/$subNote_id');
     return response;

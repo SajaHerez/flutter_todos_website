@@ -1,6 +1,6 @@
 class Endpoint {
   Endpoint._();
-  static String baseUrl = "http://localhost:5000";
+  static String baseUrl = "http://localhost:80";
 
   // auth endpoints
 
@@ -28,6 +28,4 @@ class Endpoint {
   static String percentage = "/percentage";
   static String completedTasks = "$percentage/completedTask";
   static String dailyTask = "$percentage/dailyTask";
-
-
 }

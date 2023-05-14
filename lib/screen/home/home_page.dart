@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todos_website/data/model/task.dart';
+import 'package:flutter_todos_website/data/model/note.dart';
 import 'package:flutter_todos_website/data/service/task_controller.dart';
+import 'package:flutter_todos_website/data/service/user_controller.dart';
 import 'package:flutter_todos_website/util/style/spaces.dart';
+import 'package:flutter_todos_website/util/style/textStyle.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
-import '../../data/model/mock/tasks.dart';
+import '../../ID/locator.dart';
+import '../../data/local/local_storage.dart';
+import '../../util/constant/pathes.dart';
 import '../../util/routing/RouterNamed.dart';
 import '../../util/routing/RoutingUilites.dart';
 import '../../util/style/appColors.dart';
@@ -24,28 +28,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController editController = TextEditingController();
   final TextEditingController addController = TextEditingController();
-  void _onReorder(int oldIndex, int newIndex) {
-    setState(() {
-      final element = tasks.removeAt(oldIndex);
-      tasks.insert(newIndex, element);
-    });
-  }
 
   @override
   void initState() {
-    context.read<TaskController>().setTasks(tasks);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(),
+      appBar: customAppBar(context),
       body: Center(
         child: Container(
           width: 800,
           height: 800,
-          margin: const EdgeInsets.only(left: 40, right: 40, top: 60),
+          margin: const EdgeInsets.only(left: 40, right: 40, top: 30),
           child: Column(
             children: [
               SpacesHelper.verticalSpace(80),
@@ -60,16 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Add Note",
                         actionName: "Add",
                         onPressed: () {
-                          final task = Task(
-                              title: addController.text,
-                              id: tasks.length + 1,
-                              subTaskList: [],
-                              createdAt: DateTime.now().toString());
-                          print(task.createdAt);
-                          setState(() {
-                            tasks.add(task);
+                          if (addController.text.isNotEmpty) {
+                            //  print(DateTime.now().toString());
+                            context.read<TaskController>().addNote(
+                                user_id:
+                                    context.read<UserController>().getUser.id,
+                                completedAt: "",
+                                createdAt: DateTime.now().toString(),
+                                title: addController.text,
+                                isCancelled: false,
+                                isDone: false);
                             addController.clear();
-                          });
+                          }
                           Navigator.pop(context);
                         },
                       );
@@ -91,90 +90,106 @@ class _HomeScreenState extends State<HomeScreen> {
                   SpacesHelper.horizontalSpace(5),
                   SortMenue(
                     sortOnCompletedDate: () {
-                      setState(() {
-                        tasks.sort((a, b) =>
-                            a.completedAt?.compareTo(b.completedAt ?? "") ?? 1);
-                      });
+                      context.read<TaskController>().sortOnCompletedDate();
+                      // context.read<TaskController>().tasks.sort((a, b) =>
+                      //     a.completedAt?.compareTo(b.completedAt ?? "") ?? 1);
                     },
                     sortOnCreatedDate: () {
-                      setState(() {
-                        tasks.sort(
-                            (a, b) => -a.createdAt.compareTo(b.createdAt));
-                      });
+                      context.read<TaskController>().sortOnCreatedDate();
                     },
                   ),
                 ],
               ),
               SpacesHelper.verticalSpace(15),
-              Expanded(
-                child: ReorderableGridView.extent(
-                  clipBehavior: Clip.antiAlias,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  maxCrossAxisExtent: 250,
-                  onReorder: _onReorder,
-                  childAspectRatio: .90,
-                  children: tasks.map((item) {
-                    return CustomListTile(
-                      getPercent: () {
-                        return Provider.of<TaskController>(context).getTaskprogress(item.id);
-                      },
-                      onTap: () {
-                        RoutingUtil.push(RouterName.activitiesScreen,
-                            arguments: item);
-                      },
-                      createdAt: item.createdAt.substring(0, 16),
-                      onChanged: (value) {
-                        setState(() {
-                          item.isDone = value!;
-                          if (item.isDone!) {
-                            item.completedAt = DateTime.now().toString();
-                            print("the is Done value ${item.isDone}");
-                          }
-                        });
-                      },
-                      isDone: item.isDone ?? false,
-                      isCancelled: item.isCancelled ?? false,
-                      key: ValueKey(item),
-                      title: item.title,
-                      deleteOnTap: () {
-                        showAlertDialog(context, onPressed: () {
-                          setState(() {
-                            tasks.remove(item);
+              if (context.read<TaskController>().tasks.isEmpty) ...[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "${Pathes.imagePath}createNote${Extension.png}",
+                    ),
+                    Text(
+                      "Create You  First Note",
+                      style: TextStyles.descriptionTextStyle,
+                    )
+                  ],
+                )
+              ] else if (context.read<TaskController>().tasks.isNotEmpty) ...[
+                Expanded(
+                  child: ReorderableGridView.extent(
+                    clipBehavior: Clip.antiAlias,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    maxCrossAxisExtent: 250,
+                    onReorder: context.read<TaskController>().onReorder,
+                    childAspectRatio: .90,
+                    children: context.watch<TaskController>().tasks.map((item) {
+                      return CustomListTile(
+                        getPercent: () {
+                          return 0; // Provider.of<TaskController>(context).getTaskprogress(item.id);
+                        },
+                        onTap: () {
+                          RoutingUtil.push(RouterName.activitiesScreen,
+                              arguments: item);
+                        },
+                        createdAt: item.createdAt.substring(0, 16),
+                        onChanged: (value) {
+                          context.read<TaskController>().checkDone(item,
+                              context.read<UserController>().getUser.id, value);
+                        },
+                        isDone: item.isDone ?? false,
+                        isCancelled: item.isCancelled ?? false,
+                        key: ValueKey(item),
+                        title: item.title,
+                        deleteOnTap: () {
+                          showAlertDialog(context, onPressed: () {
+                            context.read<TaskController>().deleteNote(
+                                  note_id: item.id,
+                                  user_id:
+                                      context.read<UserController>().getUser.id,
+                                );
                             Navigator.pop(context);
                           });
-                        });
-                      },
-                      editOnTap: () {
-                        editController.text = item.title;
-                        showEditDialog(
-                          context,
-                          controller: editController,
-                          title: "Edit Note",
-                          actionName: "Edit",
-                          onPressed: () {
-                            setState(() {
-                              item.title = editController.text;
-                              editController.clear();
-                            });
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
-                      cancelOnTap: () {
-                        setState(() {
-                          item.isCancelled = !item.isCancelled!;
-                          item.isDone = item.isDone == true ? false : null;
-                          item.completedAt = null;
-                          print(
-                              "  the cancelled  value is : ${item.isCancelled}");
-                          // 3 cases  active => normal style , cancel => red style , done=> green style
-                        });
-                      },
-                    );
-                  }).toList(),
+                        },
+                        editOnTap: () {
+                          editController.text = item.title;
+                          showEditDialog(
+                            context,
+                            controller: editController,
+                            title: "Edit Note",
+                            actionName: "Edit",
+                            onPressed: () {
+                              if (editController.text.isNotEmpty) {
+                                context.read<TaskController>().updateNote(
+                                    note_id: item.id,
+                                    user_id: context
+                                        .read<UserController>()
+                                        .getUser
+                                        .id,
+                                    completedAt: item.completedAt ?? "",
+                                    createdAt: item.createdAt,
+                                    title: editController.text,
+                                    isCancelled: item.isCancelled ?? false,
+                                    isDone: item.isDone ?? false);
+                                editController.clear();
+                                Navigator.pop(context);
+                              }
+                            },
+                          );
+                        },
+                        cancelOnTap: () {
+                          context.read<TaskController>().cancelOn(
+                              item, context.read<UserController>().getUser.id);
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
+              ] else ...[
+                const Center(
+                  child: CircularProgressIndicator(),
+                )
+              ],
             ],
           ),
         ),

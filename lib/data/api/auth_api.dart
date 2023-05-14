@@ -21,11 +21,10 @@ class AuthAPI {
   }
 
 
- Future<Response> signIp({
+ Future<Response> signIn({
     required String path,
     required String email,
     required String password,
-    required String name,
   }) async {
     final response = await client.dio.post(path, data: {
       'email': email,
@@ -37,7 +36,7 @@ class AuthAPI {
 
 Future<Response> singOut({
     required String path,
-    required int user_id 
+    required String user_id 
   }) async {
     final response = await client.dio.get('$path/$user_id ');
     return response;

@@ -22,32 +22,12 @@ class Validation {
     return null;
   }
 
-static String? confirmPassword(String? password, String? conPassword) {
-  if (conPassword!.isEmpty) {
-    return " Enter The Password";
-  }
-  if (password!.compareTo(conPassword) != 0) {
-    return "Confirm your Entered Password";
-  }
-  return null;
-}
-
  static String? nameValidation(String? name) {
     if (name!.isEmpty) {
       return "Enter The Name";
     }
     if (!nameReg.hasMatch(name)) {
       return "Enter Valid Name(Jhon Alex)";
-    }
-    return null;
-  }
-static String? genderValidation(String? gender) {
-    if (gender!.isEmpty) {
-      return "Enter The Gender";
-    }
-    gender=gender.toUpperCase();
-    if (!(gender.startsWith('F') || gender.startsWith('M'))) {
-      return "Gender must be F/M";
     }
     return null;
   }

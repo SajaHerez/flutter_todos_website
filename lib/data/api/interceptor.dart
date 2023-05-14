@@ -7,13 +7,18 @@ class ErrorInterceptor extends Interceptor {
   @override
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    final headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
+    };
+    options.headers.addAll(headers);
     handler.next(options);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if(response.data['message'] !=null){
-    MySnackBar.showInSnackBar(response.data['message']);
+    if (response.data['message'] != null) {
+      MySnackBar.showInSnackBar(response.data['message']);
     }
     super.onResponse(response, handler);
   }

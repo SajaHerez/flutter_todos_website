@@ -1,16 +1,19 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_todos_website/util/routing/RouterNamed.dart';
 import 'package:flutter_todos_website/util/routing/RoutingUilites.dart';
+import '../../data/service/user_controller.dart';
 import '../../util/constant/pathes.dart';
 import '../../util/style/appColors.dart';
 import '../../util/style/textStyle.dart';
+import 'package:provider/provider.dart';
 
-AppBar customAppBar() {
+AppBar customAppBar(context) {
   return AppBar(
     elevation: 8,
     leadingWidth: 100,
     leading: Container(
-      //  width: ,
       margin: const EdgeInsets.only(left: 50),
       child: Column(
         children: [
@@ -37,8 +40,24 @@ AppBar customAppBar() {
     ),
     actions: [
       Container(
-        // width: 500,
-        margin: const EdgeInsets.only(right: 250),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(right: 50),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.person,
+                color: AppColors.darkGray,
+                size: 33,
+              ),
+              
+              Text(
+                Provider.of<UserController>(context, listen: true).getUser.name,
+                style: TextStyles.imageDescriptionTextStyle,
+              ),
+            ],
+          )),
+      Container(
+        margin: const EdgeInsets.only(right: 30),
         child: IconButton(
             onPressed: () {
               RoutingUtil.push(RouterName.dashboardScreen);
@@ -48,7 +67,22 @@ AppBar customAppBar() {
               color: AppColors.darkGray,
               size: 33,
             )),
-      )
+      ),
+      Container(
+        margin: const EdgeInsets.only(right: 150),
+        child: IconButton(
+            onPressed: () async {
+              await Provider.of<UserController>(context, listen: false).singOut(
+                  user_id: Provider.of<UserController>(context, listen: false)
+                      .getUser
+                      .id);
+            },
+            icon: const Icon(
+              Icons.logout,
+              color: AppColors.darkGray,
+              size: 33,
+            )),
+      ),
     ],
   );
 }

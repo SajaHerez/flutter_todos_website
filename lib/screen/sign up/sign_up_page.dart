@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todos_website/util/style/appColors.dart';
+import 'package:provider/provider.dart';
 
+import '../../data/service/user_controller.dart';
 import '../../util/constant/pathes.dart';
 import '../../util/routing/RouterNamed.dart';
 import '../../util/routing/RoutingUilites.dart';
@@ -13,7 +15,11 @@ import '../widget/customTextField.dart';
 import '../widget/customTitle.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +34,7 @@ class SignUpScreen extends StatelessWidget {
                 color: const Color.fromARGB(255, 67, 64, 64)),
             padding: const EdgeInsets.only(right: 25, left: 25, top: 20),
             child: Form(
+              key: formKey,
               child: Column(
                 children: [
                   const CustomTitle(text1: "Sign", text2: "Up"),
@@ -40,26 +47,31 @@ class SignUpScreen extends StatelessWidget {
                     hintText: "Full name",
                     path: "${Pathes.iconPath}Profile${Extension.png}",
                     validator: Validation.nameValidation,
-                    controller: TextEditingController(),
+                    controller: nameController,
                   ),
                   SpacesHelper.verticalSpace(10),
                   CustomTextField(
                     hintText: "Email",
                     path: "${Pathes.iconPath}email1${Extension.png}",
                     validator: Validation.emailValidation,
-                    controller: TextEditingController(),
+                    controller: emailController,
                   ),
                   SpacesHelper.verticalSpace(10),
                   CustomTextField(
                       hintText: "Password",
                       path: "${Pathes.iconPath}Lock${Extension.png}",
                       validator: Validation.passwordValidation,
-                      controller: TextEditingController()),
+                      controller: passwordController),
                   SpacesHelper.verticalSpace(30),
                   CustomButton(
                     text: "Sign Up",
-                    onPressed: () {
-                      RoutingUtil.push(RouterName.homeScreen);
+                    onPressed: () async {
+                      if (Validation.validateForm(formKey)) {
+                        await context.read<UserController>().signUp(
+                            email: emailController.text,
+                            password: passwordController.text,
+                            name: nameController.text);
+                      }
                     },
                   ),
                   SpacesHelper.verticalSpace(20),

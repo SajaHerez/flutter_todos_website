@@ -8,7 +8,7 @@ class PercentageAPI {
 
   Future<Response> completedTask({
     required String path,
-     required int user_id,
+     required String user_id,
     
   }) async {
     final response = await client.dio.get('$path/$user_id',);
@@ -17,7 +17,7 @@ class PercentageAPI {
 
 Future<Response> dailyTask({
    required String path,
-   required int user_id,
+   required String user_id,
    required String date
   }) async {
     final response = await client.dio.post('$path/$user_id',data: {
