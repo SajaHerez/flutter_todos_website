@@ -21,13 +21,13 @@ class Routers {
         return MaterialPageRoute(builder: (context) => LoginScreen());
       case RouterName.homeScreen:
         return MaterialPageRoute(builder: (context) => HomeScreen());
-      // case RouterName.activitiesScreen:
-      //   return MaterialPageRoute(
-      //       builder: (context) => ActivitiesScreen(
-      //             task: settings.arguments as Task,
-      //           ));
-      // case RouterName.dashboardScreen:
-      //   return MaterialPageRoute(builder: (context) => const DashboardScreen());
+      case RouterName.activitiesScreen:
+        return MaterialPageRoute(
+            builder: (context) => ActivitiesScreen(
+                  task: settings.arguments as Task,
+                ));
+      case RouterName.dashboardScreen:
+        return MaterialPageRoute(builder: (context) =>  DashboardScreen());
 
       default:
         return RoutingUtil.errorRoute();

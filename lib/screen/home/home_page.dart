@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../../ID/locator.dart';
 import '../../data/local/local_storage.dart';
+import '../../data/service/sub_task_controller.dart';
 import '../../util/constant/pathes.dart';
 import '../../util/routing/RouterNamed.dart';
 import '../../util/routing/RoutingUilites.dart';
@@ -91,8 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   SortMenue(
                     sortOnCompletedDate: () {
                       context.read<TaskController>().sortOnCompletedDate();
-                      // context.read<TaskController>().tasks.sort((a, b) =>
-                      //     a.completedAt?.compareTo(b.completedAt ?? "") ?? 1);
                     },
                     sortOnCreatedDate: () {
                       context.read<TaskController>().sortOnCreatedDate();
@@ -129,8 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           return 0; // Provider.of<TaskController>(context).getTaskprogress(item.id);
                         },
                         onTap: () {
-                          RoutingUtil.push(RouterName.activitiesScreen,
-                              arguments: item);
+                          Future.delayed(Duration.zero, () {
+                            context
+                                .read<SubTaskController>()
+                                .setSubTaskList(item.subTaskList);
+                            RoutingUtil.push(RouterName.activitiesScreen,
+                                arguments: item);
+                          });
                         },
                         createdAt: item.createdAt.substring(0, 16),
                         onChanged: (value) {

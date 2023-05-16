@@ -1,6 +1,5 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_todos_website/data/service/task_controller.dart';
 import 'package:flutter_todos_website/util/routing/RouterNamed.dart';
 import 'package:flutter_todos_website/util/routing/RoutingUilites.dart';
 import '../../data/service/user_controller.dart';
@@ -9,7 +8,7 @@ import '../../util/style/appColors.dart';
 import '../../util/style/textStyle.dart';
 import 'package:provider/provider.dart';
 
-AppBar customAppBar(context) {
+AppBar customAppBar(BuildContext context) {
   return AppBar(
     elevation: 8,
     leadingWidth: 100,
@@ -49,7 +48,6 @@ AppBar customAppBar(context) {
                 color: AppColors.darkGray,
                 size: 33,
               ),
-              
               Text(
                 Provider.of<UserController>(context, listen: true).getUser.name,
                 style: TextStyles.imageDescriptionTextStyle,
@@ -60,6 +58,12 @@ AppBar customAppBar(context) {
         margin: const EdgeInsets.only(right: 30),
         child: IconButton(
             onPressed: () {
+              context.read<TaskController>().percentageOfCompletedTask(
+                  context.read<UserController>().getUser.id);
+              context.read<TaskController>().percentageOfDailyTask(
+                  context.read<UserController>().getUser.id,
+                  DateTime.now().toString().substring(0, 10));
+              print(DateTime.now().toString().substring(0, 10));
               RoutingUtil.push(RouterName.dashboardScreen);
             },
             icon: const Icon(

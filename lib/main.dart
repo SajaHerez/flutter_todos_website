@@ -4,6 +4,7 @@ import 'package:flutter_todos_website/ID/locator.dart';
 import 'package:flutter_todos_website/data/service/task_controller.dart';
 import 'package:flutter_todos_website/util/style/appColors.dart';
 import 'package:provider/provider.dart';
+import 'data/service/sub_task_controller.dart';
 import 'data/service/user_controller.dart';
 import 'util/routing/Router.dart';
 import 'util/routing/RouterNamed.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
             providers: [
               ChangeNotifierProvider(create: (context) => UserController()),
               ChangeNotifierProvider(create: (context) => TaskController()),
+              ChangeNotifierProvider(create: (context) => SubTaskController()),
             ],
             child: MaterialApp(
               navigatorKey: RoutingUtil.navigatorKey,

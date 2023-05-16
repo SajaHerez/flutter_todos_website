@@ -53,23 +53,7 @@ class CustomListTile extends StatelessWidget {
             children: [
               Text(title, style: getStyle(isDone, isCancelled)),
               SpacesHelper.verticalSpace(55),
-              Align(
-                alignment: Alignment.center,
-                child: LinearPercentIndicator(
-                    width: 160.0,
-                    barRadius: const Radius.circular(10),
-                    lineHeight: 14.0,
-                    percent: getPercent() ?? 0.0,
-                    animationDuration: 800,
-                    animation: true,
-                    center: Text(
-                      "${(getPercent() ?? 0.0) * 100}%",
-                      style: const TextStyle(
-                          fontSize: 12.0, color: AppColors.white),
-                    ),
-                    backgroundColor: Colors.white60,
-                    progressColor: Colors.black38),
-              ),
+            
               SpacesHelper.verticalSpace(20),
               ButtonBar(
                 alignment: MainAxisAlignment.spaceBetween,
