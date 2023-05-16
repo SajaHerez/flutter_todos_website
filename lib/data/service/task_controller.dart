@@ -67,12 +67,12 @@ class TaskController extends ChangeNotifier {
         user_id: user_id,
         note_id: note_id);
     if (response.statusCode == 200) {
-      final t = tasks.firstWhere((element) => element.id == note_id);
-      t.title = title;
-      t.isCancelled = isCancelled;
-      t.isDone = isDone;
-      t.completedAt = completedAt;
-      tasks[tasks.indexOf(t)] = t;
+      final t = tasks.firstWhere((element) => element.id == note_id);  
+      // t.title = title;
+      // t.isCancelled = isCancelled;
+      // t.isDone = isDone;
+      // t.completedAt = completedAt;
+      tasks[tasks.indexOf(t)] = Task.fromJson(response.data["data"]);
       notifyListeners();
     }
   }
